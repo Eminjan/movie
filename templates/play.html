@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+播放|微电影
+{% endblock %}
+
+{% block content %}
+    <link href="https://vjs.zencdn.net/7.0.3/video-js.css" rel="stylesheet">
+
+    <div class="container" style="margin-top:76px">
+    <div class="row">
+        <div class="col-md-8">
+            <div id="moviecontainer">
+                <video id="my-video" class="video-js" controls preload="auto" width="780" height="498"
+                  poster="http://p7omnbm3i.bkt.clouddn.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20180225163045.jpg" data-setup="{}">
+                    <source src="http://p7omnbm3i.bkt.clouddn.com/1-1.mp4" type='video/mp4'>
+                </video>
+            </div>
+        </div>
+        <div class="col-md-4" style="height:500px;">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-facetime-video"></span>&nbsp;电影介绍</h3>
+                </div>
+                <div class="panel-body" style="height:459px;">
+                    <table class="table">
+                        <tr>
+                            <td style="width:30%;color:#ccc;font-weight:bold;font-style:italic;">
+                                <span class="glyphicon glyphicon-film"></span>&nbsp;片名
+                            </td>
+                            <td>{{ movie.name }}</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;font-style:italic;">
+                                <span class="glyphicon glyphicon-tag"></span>&nbsp;标签
+                            </td>
+                            <td>{{ movie.tag.tag_name }}</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;font-style:italic;">
+                                <span class="glyphicon glyphicon-time"></span>&nbsp;片长
+                            </td>
+                            <td>{{ movie.mov_times }}&nbsp;分钟</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;font-style:italic;">
+                                <span class="glyphicon glyphicon-map-marker"></span>&nbsp;地区
+                            </td>
+                            <td>{{ movie.region }}</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;font-style:italic;">
+                                <span class="glyphicon glyphicon-star"></span>&nbsp;星级
+                            </td>
+                            <td>
+                                <div>{{ movie.star }}
+                                    <span class="glyphicon glyphicon-star" style="color:#FFD119"></span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;font-style:italic;">
+                                <span class="glyphicon glyphicon-calendar"></span>&nbsp;上映时间
+                            </td>
+                            <td>{{ movie.add_time.add_time|date:'Y' }}&nbsp;年</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;font-style:italic;">
+                                <span class="glyphicon glyphicon-play"></span>&nbsp;播放数量
+                            </td>
+                            <td>{{ movie.play_nums }}&nbsp;次</td>
+                        </tr>
+
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;font-style:italic;">
+                                <span class="glyphicon glyphicon-picture"></span>&nbsp;影片介绍
+                            </td>
+                            <td>
+                            {{ movie.desc }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-top:6px;">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span>&nbsp;电影评论</h3>
+                </div>
+                <div class="panel-body">
+
+                        {% if user.is_authenticated %}
+                            <strong>您好:&nbsp;😂{{ user.nick_name }}&nbsp;&nbsp;欢迎您在评论😎</strong><hr/>
+                            <form role="form" style="margin-bottom:6px;">
+                                <div class="form-group">
+                                    <div>
+                                        <b><em>抱歉暂时不能评论，评论和收藏功能紧急开发中敬请期待❤</em></b>
+                                        <hr/>
+                                        <b><em>您有什么意见反馈请发我邮箱👉<a href="mailto:eminjan123@aliyun.com">eminjan123@aliyun.com</a></em></b>
+                                    </div>
+                                    <div class="col-xs-12" id="error_content"></div>
+                                </div>
+                                <a class="btn btn-success" id="btn-sub"><span class="glyphicon glyphicon-edit"></span>&nbsp;提交评论</a>
+                                &nbsp;
+                                <a class="btn btn-danger" id="btn-col"><span class="glyphicon glyphicon-heart"></span>&nbsp;收藏电影</a>
+                            </form>
+                        {% else %}
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert">
+                            <span aria-hidden="true">×</span>
+                            <span class="sr-only">Close</span>
+                        </button>
+                        <strong>请先<a href="{% url 'login'  %}?from={{ request.get_full_path }}"  class="text-info">登录</a>，才可参与评论！</strong>
+                        {% endif %}
+                    </div>
+                    <hr/>
+                    <ul class="commentList">
+                        <li class="item cl">
+                            <a href="user.html">
+                                <i class="avatar size-L radius">
+                                    <img alt=width="50" height="50" src="http://static.runoob.com/images/mix/img_avatar.png " class="img-circle" style="border:1px solid #abcdef;">
+                                </i>
+                            </a>
+                            <div class="comment-main">
+                                <header class="comment-header">
+                                    <div class="comment-meta">
+                                        <a class="comment-author" href="#}">xiaojiang</a>
+                                        评论于
+                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">2017-03-01 09:12:51</time>
+                                    </div>
+                                </header>
+                                <div class="comment-body">
+                                    <p>这电影真好看！</p>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://vjs.zencdn.net/7.0.3/video.js"></script>
+{% endblock %}

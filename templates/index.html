@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+    首页|微电影
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'animation/css/style.css' %}">
+    <section id="hotmovie" style="margin-top:76px">
+        <div class="container">
+            <div class="row wow fadeInRight" data-wow-delay="0.6s">
+                <div class="row">
+                    <div class="main_banner">
+                        <div class="main_banner_wrap">
+                            <canvas id="myCanvas" width="150" height="150"></canvas>
+                            <div class="main_banner_box" id="m_box">
+                                <a href="javascript:void(0)" class="banner_btn js_pre">
+                                    <span class="banner_btn_arrow"><i></i></span>
+                                </a>
+                                <a href="javascript:void(0)" class="banner_btn btn_next js_next">
+                                    <span class="banner_btn_arrow"><i></i></span>
+                                </a>
+                                <ul>
+
+                                    <li id="imgCard0">
+                                        <a href=""><span style="opacity:0;"></span></a>
+                                        <img src="{% static 'animation/main_banner/big0020150102211033.jpg' %}" alt="">
+                                        <p style="bottom:0">周杰伦粉丝版MV</p>
+                                    </li>
+                                    <li id="imgCard1">
+                                        <a href=""><span style="opacity:0.4;"></span></a>
+                                        <img src="{% static 'animation/main_banner/big0120150101183428.jpg' %}" alt="">
+                                        <p>乐侃有声节目第二期</p>
+                                    </li>
+                                    <li id="imgCard2">
+                                        <a href=""><span style="opacity:0.4;"></span></a>
+                                        <img src="{% static 'animation/main_banner/big0320150101183351.jpg' %}" alt="">
+                                        <p>乐见大牌：”荣“耀之声，”维“我独尊</p>
+                                    </li>
+                                    <li id="imgCard3">
+                                        <a href=""><span style="opacity:0.4;"></span></a>
+                                        <img src="{% static 'animation/main_banner/big0420150101224343.jpg' %}" alt="">
+                                        <p>王力宏四年心血结晶</p>
+                                    </li>
+                                    <li id="imgCard4">
+                                        <a href=""><span style="opacity:0.4;"></span></a>
+                                        <img src="{% static 'animation/main_banner/big0720150102210934.jpg' %}" alt="">
+                                        <p>MV精选：《武媚》女神团美艳大比拼</p>
+                                    </li>
+                                </ul>
+                                <!--火狐倒影图层-->
+                                <p id="rflt"></p>
+                                <!--火狐倒影图层-->
+                            </div>
+                            <!--序列号按钮-->
+                            <div class="btn_list">
+                                <span class="curr"></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--热门电影-->
+    <!--电影列表-->
+    <section id="movielist">
+        <div class="container">
+            <div class="row wow fadeIn" data-wow-delay="0.6s">
+                <div class="col-md-12 table-responsive">
+                    <table class="table text-left table-bordered" id="movietags">
+                        <tr>
+                            <td style="width:10%;">电影标签</td>
+                            <td style="width:90%;">
+                                {% for tag in tags %}
+                                    <a class="label label-info" href="{% url 'movie_with_tag' tag.id %}"><span
+                                            class="glyphicon glyphicon-tag"></span>
+                                        {{ tag.tag_name }}
+                                    </a>
+                                {% endfor %}
+                        </tr>
+                        <tr>
+                            <td>电影星级</td>
+                            <td>
+                                {% for star in stars %}
+                                    <a class="label label-warning" href="{% url 'movie_with_star' star.id %}">&nbsp;{{ star }}&nbsp;<span
+                                            class="glyphicon glyphicon-star"></span></a>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>上映时间</td>
+                            <td>
+                                {% for add_time in add_times %}
+                                    <a class="label label-default" href="{% url 'movie_with_time' add_time.id %}"><span
+                                            class="glyphicon glyphicon-time"></span>&nbsp;<span>{{ add_time.add_time|date:"Y" }}</span></a>
+                                {% endfor %}
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+                {% for movie in page_of_movies.object_list %}
+                    <div class="col-md-3">
+
+                        <div class="movielist text-center">
+
+                            <div class="text-left" style="margin-left:auto;margin-right:auto;width:210px;">
+                                <div class="card" style="width:210px">
+                                    <img class="card-img-top" src="{{ movie.image }}" width="100" height="200" alt="Card image" style="width:100%">
+                                    <div class="card-body">
+                                      <span style="color:#999;font-style: italic;">{{ movie.name }}</span><br>
+                                <div>
+                                    <b>星级:</b>&nbsp;&nbsp;{{ movie.star }}
+                                    <span class="glyphicon glyphicon-star" style="color:#FFD119"></span>
+                                </div>
+                                    </div>
+                                  </div>
+
+                            </div>
+                            <a href="{% url 'play' movie.id %}" class="btn btn-primary" role="button"><span
+                                    class="glyphicon glyphicon-play"></span>&nbsp;播放</a>
+                        </div>
+
+                    </div>
+                {% endfor %}
+                <div class="col-md-12">
+
+                    <ul class="pagination">
+                        <li>
+                            {% if page_of_movies.has_previous %}
+                                <li>
+                                    <a href="?page={{ page_of_movies.previous_page_number }}" aria-label="Previous">
+                                        <span aria-hidden="true">上一页</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <span aria-hidden="true">上一页</span>
+                            {% endif %}
+
+                        </li>
+
+                        {% for page_num in page_range %}
+                            {% if page_num == page_of_movies.number %}
+                            <li class="active"><span>{{ page_num }}</span></li>
+                            {% else %}
+                            <li><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        <li>
+                            {% if page_of_movies.has_next %}
+                                <li>
+                                    <a href="?page={{ page_of_movies.next_page_number }}" aria-label="Next">
+                                        <span aria-hidden="true">下一页</span>
+                                    </a>
+                                </li>
+                            {% else %}
+                                <span aria-hidden="true">下一页</span>
+                            {% endif %}
+
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript" src="{% static 'animation/js/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'animation/js/script.js' %}"></script>
+{% endblock %}

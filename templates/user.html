@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}
+首页|微电影
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top:76px">
+    <div class="col-md-3">
+        <div class="list-group">
+            <a href="{% url 'user' %}" class="list-group-item active">
+                <span class="glyphicon glyphicon-user"></span>&nbsp;会员中心
+            </a>
+            <a href="#" class="list-group-item">
+                <span class="glyphicon glyphicon-comment"></span>&nbsp;评论记录
+            </a>
+            <a href="#" class="list-group-item">
+                <span class="glyphicon glyphicon-calendar"></span>&nbsp;登录日志
+            </a>
+            <a href="#" class="list-group-item">
+                <span class="glyphicon glyphicon-heart"></span>&nbsp;收藏电影
+            </a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;会员中心</h3>
+            </div>
+            <div class="panel-body">
+                <form role="form">
+
+                    <fieldset>
+                            <div class="form-group">
+                                <label for="input_name"><span class="glyphicon glyphicon-user"></span>&nbsp;昵称</label>:&nbsp;{{ request.user.nick_name }}&nbsp;🎆
+                            </div>
+                            <div class="col-md-12" id="error_name"></div>
+                            <hr/>
+                            <div class="form-group">
+                                <label for="input_email"><span class="glyphicon glyphicon-envelope"></span>&nbsp;邮箱</label>
+                                :&nbsp;{{ request.user.email }}
+                            </div>
+                            <div class="col-md-12" id="error_email"></div>
+                        </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
